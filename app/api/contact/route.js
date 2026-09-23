@@ -18,6 +18,15 @@ export async function POST(req) {
 
     const sheets = google.sheets({ version: "v4", auth });
 
+    const getRows = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range: "Sheet1!B:B", 
+    });
+
+   
+    const existingRows = getRows.data.values || [];
+    const newClientId = existingRows.length;  
+
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
       range: "Sheet1!B:G",
@@ -25,6 +34,7 @@ export async function POST(req) {
       requestBody: {
         values: [
           [
+            newClientId,
             name,
             email,
             subject,
@@ -40,7 +50,7 @@ export async function POST(req) {
       },
     });
 
-    return NextResponse.json({ message: "Success" }, { status: 200 });
+    return NextResponse.json({ message: "Success", clientNumber: newClientId, userName: name }, { status: 200 });
   } catch (error) {
     console.error("Error adding row to Google Sheets:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

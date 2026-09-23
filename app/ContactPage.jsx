@@ -39,7 +39,9 @@ export default function ContactPage() {
       console.log(result);
 
       if (result.message === "Success") {
-        setSuccess("تم الحجز بنجاح! 🎉");
+        setSuccess(
+          `  تم الحجز بنجاح رقم الطلب هو (${result.clientNumber})     ${result.userName}        `,
+        );
         setFormData({
           name: "",
           email: "",

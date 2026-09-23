@@ -68,10 +68,10 @@ export default function ContactPage() {
   return (
     <div
       style={{
-        maxWidth: "400px",
         margin: "40px auto",
         fontFamily: "sans-serif",
       }}
+      className="w-[85%] md:w-[30%]"
     >
       <div className="w-fit mx-auto py-5 text-center">
         {error && (
@@ -179,16 +179,16 @@ export default function ContactPage() {
           </p>
           <div className="w-full p-5 rounded-2xl bg-gray-300">
             <div className="font-bold text-xl md:text-2xl py-2">
-              Your Name Is: <span className="ps-1 font-medium">{name}</span>
+              Your Name is: <span className="ps-1 font-medium">{name}</span>
             </div>
             <div className="font-bold text-xl md:text-2xl py-2">
-              Your Age Is: <span className="ps-1 font-medium">{age}</span>
+              Your Age is: <span className="ps-1 font-medium">{age}</span>
             </div>
             <div className="font-bold text-xl md:text-2xl py-2">
-              Your Phone Is: <span className="ps-1 font-medium">{phone}</span>
+              Your Phone is: <span className="ps-1 font-medium">{phone}</span>
             </div>
             <div className="font-bold text-xl md:text-2xl py-2">
-              Number of Order is:
+              Inspection Number is:
               <span className="ps-1 font-medium">{number}</span>
             </div>
             <div className="font-bold text-xl md:text-2xl py-2">

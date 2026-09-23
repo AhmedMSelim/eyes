@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    age: "",
     phone: "",
     subject: "",
     message: "",
@@ -14,6 +14,10 @@ export default function ContactPage() {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [number, setNumber] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -39,12 +43,14 @@ export default function ContactPage() {
       console.log(result);
 
       if (result.message === "Success") {
-        setSuccess(
-          `  تم الحجز بنجاح رقم الطلب هو (${result.clientNumber})     ${result.userName}        `,
-        );
+        setName(result.userName);
+        setAge(result.age);
+        setNumber(result.clientNumber);
+        setPhone(result.phone);
+        setSuccess(`تم الحجز بنجاح`);
         setFormData({
           name: "",
-          email: "",
+          age: "",
           subject: "",
           message: "",
           phone: "",
@@ -68,11 +74,6 @@ export default function ContactPage() {
       }}
     >
       <div className="w-fit mx-auto py-5 text-center">
-        {success && (
-          <p style={{ marginTop: "15px", fontWeight: "bold", color: "green" }}>
-            {success}
-          </p>
-        )}
         {error && (
           <p style={{ marginTop: "15px", fontWeight: "bold", color: "red" }}>
             {error}
@@ -98,14 +99,14 @@ export default function ContactPage() {
         </div>
 
         <div>
-          <label>Email:</label>
+          <label>Age:</label>
           <input
-            type="email"
-            name="email"
-            value={formData.email}
+            type="number"
+            name="age"
+            value={formData.age}
             onChange={handleChange}
             required
-            placeholder="Enter Your Email"
+            placeholder="Enter Your Age"
             className="input-field placeholder:text-gray-500 placeholder:italic border border-gray-300 rounded-md"
             style={{ width: "100%", padding: "8px", marginTop: "4px" }}
           />
@@ -167,6 +168,42 @@ export default function ContactPage() {
           {loading ? "Loading..." : "Send"}
         </button>
       </form>
+
+      {success && (
+        <div className="w-full mx-auto">
+          <p
+            style={{ marginTop: "15px", fontWeight: "bold", color: "green" }}
+            className="py-5 text-2xl text-center"
+          >
+            {success}
+          </p>
+          <div className="w-full p-5 rounded-2xl bg-gray-300">
+            <div className="font-bold text-xl md:text-2xl py-2">
+              Your Name Is: <span className="ps-1 font-medium">{name}</span>
+            </div>
+            <div className="font-bold text-xl md:text-2xl py-2">
+              Your Age Is: <span className="ps-1 font-medium">{age}</span>
+            </div>
+            <div className="font-bold text-xl md:text-2xl py-2">
+              Your Phone Is: <span className="ps-1 font-medium">{phone}</span>
+            </div>
+            <div className="font-bold text-xl md:text-2xl py-2">
+              Number of Order is:
+              <span className="ps-1 font-medium">{number}</span>
+            </div>
+            <div className="font-bold text-xl md:text-2xl py-2">
+              Date:
+              <span className="ps-1 font-medium">
+                {new Date().toLocaleString("en-US", {
+                  timeZone: "Africa/Cairo",
+                  dateStyle: "short",
+                  timeStyle: "medium",
+                })}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { name, email, subject, message, phone } = await req.json();
+    const { name, age, subject, message, phone } = await req.json();
 
     const rawKey = process.env.GOOGLE_PRIVATE_KEY || "";
     const privateKey = rawKey.replace(/^"|"$/g, "").replace(/\\n/g, "\n");
@@ -20,12 +20,11 @@ export async function POST(req) {
 
     const getRows = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "Sheet1!B:B", 
+      range: "Sheet1!B:B",
     });
 
-   
     const existingRows = getRows.data.values || [];
-    const newClientId = existingRows.length;  
+    const newClientId = existingRows.length;
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
@@ -36,7 +35,7 @@ export async function POST(req) {
           [
             newClientId,
             name,
-            email,
+            age,
             subject,
             message,
             phone,
@@ -50,7 +49,16 @@ export async function POST(req) {
       },
     });
 
-    return NextResponse.json({ message: "Success", clientNumber: newClientId, userName: name }, { status: 200 });
+    return NextResponse.json(
+      {
+        message: "Success",
+        clientNumber: newClientId,
+        userName: name,
+        age: age,
+        phone: phone,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Error adding row to Google Sheets:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

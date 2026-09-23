@@ -24,7 +24,18 @@ export async function POST(req) {
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
-          [name, email, subject, message, phone, new Date().toLocaleString()],
+          [
+            name,
+            email,
+            subject,
+            message,
+            phone,
+            new Date().toLocaleString("en-US", {
+              timeZone: "Africa/Cairo",
+              dateStyle: "short",
+              timeStyle: "medium",
+            }),
+          ],
         ],
       },
     });

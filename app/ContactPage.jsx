@@ -67,6 +67,18 @@ export default function ContactPage() {
         fontFamily: "sans-serif",
       }}
     >
+      <div className="w-fit mx-auto py-5 text-center">
+        {success && (
+          <p style={{ marginTop: "15px", fontWeight: "bold", color: "green" }}>
+            {success}
+          </p>
+        )}
+        {error && (
+          <p style={{ marginTop: "15px", fontWeight: "bold", color: "red" }}>
+            {error}
+          </p>
+        )}
+      </div>
       <form
         onSubmit={handleSubmit}
         style={{ display: "flex", flexDirection: "column", gap: "12px" }}
@@ -155,17 +167,6 @@ export default function ContactPage() {
           {loading ? "Loading..." : "Send"}
         </button>
       </form>
-
-      {success && (
-        <p style={{ marginTop: "15px", fontWeight: "bold", color: "green" }}>
-          {success}
-        </p>
-      )}
-      {error && (
-        <p style={{ marginTop: "15px", fontWeight: "bold", color: "red" }}>
-          {error}
-        </p>
-      )}
     </div>
   );
 }

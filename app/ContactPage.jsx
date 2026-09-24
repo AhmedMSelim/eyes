@@ -135,7 +135,7 @@ export default function ContactPage() {
    */
   function getTodayClinicStatus() {
     const today = new Date();
-    const dayOfWeek = 0; //today.getDay(); // 0 = Sunday, 1 = Monday, 4 = Thursday...
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, 4 = Thursday...
 
     const days = [
       "Sunday",
@@ -150,7 +150,7 @@ export default function ContactPage() {
     const currentDayName = days[dayOfWeek];
 
     // Clinic is open on Sunday (0) and Monday (1) only
-    const isOpenToday = dayOfWeek === 0 || dayOfWeek === 3;
+    const isOpenToday = dayOfWeek === 0 || dayOfWeek === 4;
 
     return {
       todayName: currentDayName,

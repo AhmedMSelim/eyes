@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -18,6 +18,41 @@ export default function ContactPage() {
   const [age, setAge] = useState("");
   const [number, setNumber] = useState("");
   const [phone, setPhone] = useState("");
+  const [contact, setContact] = useState(false);
+  const [tagmoo, setTagmoo] = useState(false);
+
+  console.log(number);
+
+  /**
+   * حساب وقت حضور المريض بناءً على ترتيبة في الحجز
+   * @param {number} queueNumber - رقم حجز المريض (1, 2, 3...)
+   * @param {string} startTimeStr - وقت بداية العيادة بصيغة "HH:MM" (افتراضي 19:00)
+   * @param {number} intervalMinutes - الوقت المخصص لكل مريض بالدقائق (افتراضي 15)
+   */
+
+  function calculateAppointmentTime(
+    number,
+    startTimeStr = "19:00",
+    intervalMinutes = 15,
+  ) {
+    const [startHours, startMinutes] = startTimeStr.split(":").map(Number);
+
+    // إنشاء كائن تاريخ لحساب الوقت بسهولة
+    const date = new Date();
+    date.setHours(startHours, startMinutes, 0, 0);
+
+    // إضافة الموعد بناءً على رقم الحجز
+    const addedMinutes = (number - 1) * intervalMinutes;
+    date.setMinutes(date.getMinutes() + addedMinutes);
+
+    // تنسيق الوقت للعرض باللغة العربية (مثال: 07:15 م)
+    return date.toLocaleTimeString("en-EG", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+  const date = calculateAppointmentTime(number);
 
   const handleChange = (e) => {
     setFormData({
@@ -32,38 +67,105 @@ export default function ContactPage() {
     setSuccess("");
     setError("");
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-      console.log(result);
-
-      if (result.message === "Success") {
-        setName(result.userName);
-        setAge(result.age);
-        setNumber(result.clientNumber);
-        setPhone(result.phone);
-        setSuccess(`تم الحجز بنجاح`);
-        setFormData({
-          name: "",
-          age: "",
-          subject: "",
-          message: "",
-          phone: "",
+    if (contact) {
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
         });
-      } else {
-        setError("حدث خطأ أثناء الإرسال.");
+
+        const result = await response.json();
+
+        if (result.message === "Success") {
+          setName(result.userName);
+          setAge(result.age);
+          setNumber(result.clientNumber);
+          setPhone(result.phone);
+          setSuccess(`تم الحجز بنجاح`);
+          setFormData({
+            name: "",
+            age: "",
+            subject: "",
+            message: "",
+            phone: "",
+          });
+        } else {
+          setError("حدث خطأ أثناء الإرسال.");
+        }
+      } catch (error) {
+        setError("عفواً، تعذر الاتصال بالسيرفر.");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      setError("عفواً، تعذر الاتصال بالسيرفر.");
-    } finally {
-      setLoading(false);
+    } else if (tagmoo) {
+      try {
+        const response = await fetch("/api/nasser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (result.message === "Success") {
+          setName(result.userName);
+          setAge(result.age);
+          setNumber(result.clientNumber);
+          setPhone(result.phone);
+          setSuccess(`تم الحجز بنجاح`);
+          setFormData({
+            name: "",
+            age: "",
+            subject: "",
+            message: "",
+            phone: "",
+          });
+        } else {
+          setError("حدث خطأ أثناء الإرسال.");
+        }
+      } catch (error) {
+        setError("عفواً، تعذر الاتصال بالسيرفر.");
+      } finally {
+        setLoading(false);
+      }
     }
   };
+
+  /**
+   * Checks clinic status for today based on working days (Sunday & Monday).
+   */
+  function getTodayClinicStatus() {
+    const today = new Date();
+    const dayOfWeek = 0; //today.getDay(); // 0 = Sunday, 1 = Monday, 4 = Thursday...
+    console.log(dayOfWeek);
+
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    const currentDayName = days[dayOfWeek];
+
+    // Clinic is open on Sunday (0) and Monday (1) only
+    const isOpenToday = dayOfWeek === 0 || dayOfWeek === 3;
+    console.log(isOpenToday);
+
+    return {
+      todayName: currentDayName,
+      isOpen: isOpenToday,
+      message: isOpenToday
+        ? `The clinic is open today (${currentDayName}). Appointments available starting from 7:00 PM.`
+        : `The clinic is closed today (${currentDayName}). Working days are Sunday and Monday only.`,
+    };
+  }
+
+  const { isOpen, message } = getTodayClinicStatus();
 
   return (
     <div
@@ -79,6 +181,25 @@ export default function ContactPage() {
             {error}
           </p>
         )}
+      </div>
+      {message}
+      <div className="w-fit mx-auto text-center py-5">
+        <button
+          onClick={() => {
+            (setContact(!contact), setTagmoo(false));
+          }}
+          className={` p-3 rounded-2xl ${contact ? "bg-blue-500" : "bg-green-400"}`}
+        >
+          Nasser
+        </button>
+        <button
+          onClick={() => {
+            (setContact(false), setTagmoo(!tagmoo));
+          }}
+          className={`ms-3 p-3 rounded-2xl  ${tagmoo ? "bg-blue-500" : "bg-green-400"}`}
+        >
+          Tagmoo
+        </button>
       </div>
       <form
         onSubmit={handleSubmit}
@@ -155,15 +276,15 @@ export default function ContactPage() {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || !isOpen}
           style={{
             padding: "10px",
-            backgroundColor: "#0070f3",
             color: "#fff",
             border: "none",
             borderRadius: "4px",
-            cursor: loading ? "not-allowed" : "pointer",
+            cursor: loading || !isOpen ? "not-allowed" : "pointer",
           }}
+          className={`w-full ${loading || !isOpen ? "bg-gray-400" : "bg-blue-500"} text-white font-bold py-2 px-4 rounded`}
         >
           {loading ? "Loading..." : "Send"}
         </button>
@@ -200,6 +321,10 @@ export default function ContactPage() {
                   timeStyle: "medium",
                 })}
               </span>
+            </div>
+            <div className="font-bold text-xl md:text-2xl py-2">
+              The Appointment Time is:
+              <span className="ps-1 font-medium">{date}</span>
             </div>
           </div>
         </div>

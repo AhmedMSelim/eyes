@@ -299,6 +299,9 @@ export default function ContactPage() {
             {success}
           </p>
           <div className="w-full p-5 rounded-2xl bg-gray-300">
+            <div className="text-center text-2xl text-blue-600">
+              {tagmoo ? "Tagmoo" : "Nasser"}
+            </div>
             <div className="font-bold text-xl md:text-2xl py-2">
               Your Name is: <span className="ps-1 font-medium">{name}</span>
             </div>

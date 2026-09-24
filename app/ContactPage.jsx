@@ -20,6 +20,7 @@ export default function ContactPage() {
   const [phone, setPhone] = useState("");
   const [contact, setContact] = useState(false);
   const [tagmoo, setTagmoo] = useState(false);
+  const [areaMessage, setAreaMessage] = useState(false);
 
   /**
    * حساب وقت حضور المريض بناءً على ترتيبة في الحجز
@@ -64,6 +65,11 @@ export default function ContactPage() {
     setLoading(true);
     setSuccess("");
     setError("");
+    if (!tagmoo && !contact) {
+      setLoading(false);
+      setAreaMessage("Choose Area");
+      return;
+    }
 
     if (contact) {
       try {
@@ -270,6 +276,9 @@ export default function ContactPage() {
             className="input-field placeholder:text-gray-500 placeholder:italic border border-gray-300 rounded-md"
             style={{ width: "100%", padding: "8px", marginTop: "4px" }}
           />
+        </div>
+        <div className="text-red-500 text-center text-sm">
+          <p>{areaMessage}</p>
         </div>
 
         <button

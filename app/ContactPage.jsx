@@ -178,7 +178,9 @@ export default function ContactPage() {
           </p>
         )}
       </div>
-      {message}
+      <div className={`${isOpen ? "text-green-600" : "text-red-600"}`}>
+        {message}
+      </div>
       <div className="w-fit mx-auto text-center py-5">
         <button
           onClick={() => {

@@ -323,7 +323,7 @@ export default function ContactPage() {
               </span>
             </div>
             <div className="font-bold text-xl md:text-2xl py-2">
-              The Appointment Time is:
+              The Appointment is:
               <span className="ps-1 font-medium">{date}</span>
             </div>
           </div>

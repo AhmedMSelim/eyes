@@ -21,8 +21,6 @@ export default function ContactPage() {
   const [contact, setContact] = useState(false);
   const [tagmoo, setTagmoo] = useState(false);
 
-  console.log(number);
-
   /**
    * حساب وقت حضور المريض بناءً على ترتيبة في الحجز
    * @param {number} queueNumber - رقم حجز المريض (1, 2, 3...)
@@ -138,7 +136,6 @@ export default function ContactPage() {
   function getTodayClinicStatus() {
     const today = new Date();
     const dayOfWeek = 0; //today.getDay(); // 0 = Sunday, 1 = Monday, 4 = Thursday...
-    console.log(dayOfWeek);
 
     const days = [
       "Sunday",
@@ -154,7 +151,6 @@ export default function ContactPage() {
 
     // Clinic is open on Sunday (0) and Monday (1) only
     const isOpenToday = dayOfWeek === 0 || dayOfWeek === 3;
-    console.log(isOpenToday);
 
     return {
       todayName: currentDayName,

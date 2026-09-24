@@ -80,7 +80,7 @@ export default function ContactPage() {
           setAge(result.age);
           setNumber(result.clientNumber);
           setPhone(result.phone);
-          setSuccess(`تم الحجز بنجاح`);
+          setSuccess(`Booking confirmed successfully.`);
           setFormData({
             name: "",
             age: "",
@@ -89,10 +89,10 @@ export default function ContactPage() {
             phone: "",
           });
         } else {
-          setError("حدث خطأ أثناء الإرسال.");
+          setError("An error occurred during transmission.");
         }
       } catch (error) {
-        setError("عفواً، تعذر الاتصال بالسيرفر.");
+        setError("Sorry, unable to connect to the server.");
       } finally {
         setLoading(false);
       }
@@ -188,7 +188,7 @@ export default function ContactPage() {
           }}
           className={` p-3 rounded-2xl ${contact ? "bg-blue-500" : "bg-green-400"}`}
         >
-          Nasser
+          Nasser City
         </button>
         <button
           onClick={() => {
@@ -196,7 +196,7 @@ export default function ContactPage() {
           }}
           className={`ms-3 p-3 rounded-2xl  ${tagmoo ? "bg-blue-500" : "bg-green-400"}`}
         >
-          Tagmoo
+          Tagamoa
         </button>
       </div>
       <form
@@ -294,7 +294,7 @@ export default function ContactPage() {
             style={{ marginTop: "15px", fontWeight: "bold", color: "green" }}
             className="py-5 text-2xl text-center"
           >
-            {success}
+            {success}✅
           </p>
           <div className="w-full p-5 rounded-2xl bg-gray-300">
             <div className="text-center text-2xl text-blue-600">

@@ -80,7 +80,7 @@ export default function ContactPage() {
           setAge(result.age);
           setNumber(result.clientNumber);
           setPhone(result.phone);
-          setSuccess(`Booking confirmed successfully.`);
+          setSuccess(`Booking confirmed successfully. ✅`);
           setFormData({
             name: "",
             age: "",
@@ -111,7 +111,7 @@ export default function ContactPage() {
           setAge(result.age);
           setNumber(result.clientNumber);
           setPhone(result.phone);
-          setSuccess(``);
+          setSuccess(`Booking confirmed successfully. ✅`);
           setFormData({
             name: "",
             age: "",
@@ -294,7 +294,7 @@ export default function ContactPage() {
             style={{ marginTop: "15px", fontWeight: "bold", color: "green" }}
             className="py-5 text-2xl text-center"
           >
-            {success}✅
+            {success}
           </p>
           <div className="w-full p-5 rounded-2xl bg-gray-300">
             <div className="text-center text-2xl text-blue-600">

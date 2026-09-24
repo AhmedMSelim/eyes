@@ -196,7 +196,7 @@ export default function ContactPage() {
           }}
           className={`ms-3 p-3 rounded-2xl  ${tagmoo ? "bg-blue-500" : "bg-green-400"}`}
         >
-          Tagamoa
+          Tagamoa City
         </button>
       </div>
       <form
@@ -298,7 +298,7 @@ export default function ContactPage() {
           </p>
           <div className="w-full p-5 rounded-2xl bg-gray-300">
             <div className="text-center text-2xl text-blue-600">
-              {tagmoo ? "Tagamooa" : "Nasser City"}
+              {tagmoo ? "Tagamoa" : "Nasser City"}
             </div>
             <div className="font-bold text-xl md:text-2xl py-2">
               Your Name is: <span className="ps-1 font-medium">{name}</span>

@@ -111,7 +111,7 @@ export default function ContactPage() {
           setAge(result.age);
           setNumber(result.clientNumber);
           setPhone(result.phone);
-          setSuccess(`تم الحجز بنجاح`);
+          setSuccess(``);
           setFormData({
             name: "",
             age: "",
@@ -120,10 +120,10 @@ export default function ContactPage() {
             phone: "",
           });
         } else {
-          setError("حدث خطأ أثناء الإرسال.");
+          setError("An error occurred during transmission.");
         }
       } catch (error) {
-        setError("عفواً، تعذر الاتصال بالسيرفر.");
+        setError("Sorry, unable to connect to the server.");
       } finally {
         setLoading(false);
       }

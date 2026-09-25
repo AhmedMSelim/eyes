@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function ContactPage() {
+export default function nasserPage() {
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -18,9 +18,9 @@ export default function ContactPage() {
   const [age, setAge] = useState("");
   const [number, setNumber] = useState("");
   const [phone, setPhone] = useState("");
-  const [contact, setContact] = useState(false);
-  const [tagmoo, setTagmoo] = useState(false);
-  const [areaMessage, setAreaMessage] = useState(false);
+  const [nasser, setNasser] = useState(false);
+  const [tagamoa, setTagamoa] = useState(false);
+  const [alerMessage, setAlerMessage] = useState("");
 
   /**
    * حساب وقت حضور المريض بناءً على ترتيبة في الحجز
@@ -65,15 +65,17 @@ export default function ContactPage() {
     setLoading(true);
     setSuccess("");
     setError("");
-    if (!tagmoo && !contact) {
+    if (!nasser && !tagamoa) {
+      setAlerMessage(
+        "Please select a clinic location (Nasser City or Tagamoa City).",
+      );
       setLoading(false);
-      setAreaMessage("Choose Area");
       return;
     }
 
-    if (contact) {
+    if (nasser) {
       try {
-        const response = await fetch("/api/contact", {
+        const response = await fetch("/api/nasser", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -102,9 +104,9 @@ export default function ContactPage() {
       } finally {
         setLoading(false);
       }
-    } else if (tagmoo) {
+    } else if (tagamoa) {
       try {
-        const response = await fetch("/api/nasser", {
+        const response = await fetch("/api/tagamoa", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -156,7 +158,7 @@ export default function ContactPage() {
     const currentDayName = days[dayOfWeek];
 
     // Clinic is open on Sunday (0) and Monday (1) only
-    const isOpenToday = dayOfWeek === 0 || dayOfWeek === 4;
+    const isOpenToday = true; //dayOfWeek === 0 || dayOfWeek === 4;
 
     return {
       todayName: currentDayName,
@@ -190,17 +192,17 @@ export default function ContactPage() {
       <div className="w-fit mx-auto text-center py-5">
         <button
           onClick={() => {
-            (setContact(!contact), setTagmoo(false));
+            (setNasser(!nasser), setTagamoa(false));
           }}
-          className={` p-3 rounded-2xl ${contact ? "bg-blue-500" : "bg-green-400"}`}
+          className={` p-3 rounded-2xl ${nasser ? "bg-blue-500" : "bg-green-400"}`}
         >
           Nasser City
         </button>
         <button
           onClick={() => {
-            (setContact(false), setTagmoo(!tagmoo));
+            (setNasser(false), setTagamoa(!tagamoa));
           }}
-          className={`ms-3 p-3 rounded-2xl  ${tagmoo ? "bg-blue-500" : "bg-green-400"}`}
+          className={`ms-3 p-3 rounded-2xl  ${tagamoa ? "bg-blue-500" : "bg-green-400"}`}
         >
           Tagamoa City
         </button>
@@ -277,8 +279,8 @@ export default function ContactPage() {
             style={{ width: "100%", padding: "8px", marginTop: "4px" }}
           />
         </div>
-        <div className="text-red-500 text-center text-sm">
-          <p>{areaMessage}</p>
+        <div className="text-red-500 text-xl py-2 text-center">
+          <p>{alerMessage}</p>
         </div>
 
         <button
@@ -307,7 +309,7 @@ export default function ContactPage() {
           </p>
           <div className="w-full p-5 rounded-2xl bg-gray-300">
             <div className="text-center text-2xl text-blue-600">
-              {tagmoo ? "Tagamoa City" : "Nasser City"}
+              {tagamoa ? "Tagamoa City" : "Nasser City"}
             </div>
             <div className="font-bold text-xl md:text-2xl py-2">
               Your Name is: <span className="ps-1 font-medium">{name}</span>

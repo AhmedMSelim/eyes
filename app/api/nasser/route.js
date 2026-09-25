@@ -20,7 +20,7 @@ export async function POST(req) {
 
     const getRows = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "Sheet2!B:B",
+      range: "nasser!B:B",
     });
 
     const existingRows = getRows.data.values || [];
@@ -28,7 +28,7 @@ export async function POST(req) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "Sheet2!B:G",
+      range: "nasser!B:G",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [

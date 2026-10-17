@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { name, age, subject, message, phone } = await req.json();
+    const { name, age, price, message, phone, visitType } = await req.json();
 
     const rawKey = process.env.GOOGLE_PRIVATE_KEY || "";
     const privateKey = rawKey.replace(/^"|"$/g, "").replace(/\\n/g, "\n");
@@ -28,7 +28,7 @@ export async function POST(req) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "tagamoa!B:G",
+      range: "tagamoa!B:H",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
@@ -36,9 +36,10 @@ export async function POST(req) {
             newClientId,
             name,
             age,
-            subject,
-            message,
             phone,
+            visitType,
+            price,
+            message,
             new Date().toLocaleString("en-US", {
               timeZone: "Africa/Cairo",
               dateStyle: "short",
@@ -56,6 +57,8 @@ export async function POST(req) {
         userName: name,
         age: age,
         phone: phone,
+        price: price,
+        visitType: visitType,
       },
       { status: 200 },
     );

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import ContactPage from "./ContactPage";
 import Slider from "./Slider";
+import Login from "./login/page";
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
         </h1>
         <p className="text-xl md:text-3xl font-bold">للحجز من هنا</p>
       </div>
-      <ContactPage />
+      <Login />
     </div>
   );
 }

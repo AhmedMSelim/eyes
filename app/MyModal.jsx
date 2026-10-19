@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 import CustomModal from "./CustomModal";
 import { useState } from "react";
 
-export default function MyModal({ info }) {
+export default function MyModal({ info, handleMoveData }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
@@ -19,6 +19,7 @@ export default function MyModal({ info }) {
 
       {/* المودال المخصص لـ Next.js */}
       <CustomModal
+      handleMoveData={handleMoveData}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title="End Day"

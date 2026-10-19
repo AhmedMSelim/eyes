@@ -21,7 +21,7 @@ export async function GET() {
     });
     const response2 = await sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
-      range: "tagamoa!J:K",
+      range: "tagamoa!J1:K4",
     });
 
     return Response.json({

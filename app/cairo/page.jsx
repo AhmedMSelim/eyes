@@ -120,6 +120,30 @@ export default function Cairo() {
 
   // End Get //
 
+  const handleMoveData = async () => {
+    try {
+      const res = await fetch("/api/moveDataNasser", {
+        method: "POST",
+      });
+
+      const data = await res.json();
+      console.log("ressssssssssssss", res);
+
+      if (res.ok) {
+        alert("تم نقل البيانات من الشيت ومسحها بنجاح!");
+        // يمكنك عمل ريفرش للصفحة هنا إذا أردت
+        window.location.reload();
+      } else {
+        alert("حدث خطأ: " + data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("تعذر الاتصال بالسيرفر");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   function logout() {
     localStorage.removeItem("userToken");
     router.back();
@@ -147,11 +171,13 @@ export default function Cairo() {
         </div>
         <div className={"text-green-600 text-4xl"}>New Cairo</div>
         <div className="absolute top-5 flex justify-between gap-3 right-5 text-center">
-          <MyModal info={info} />
+          {data.length > 1 && (
+            <MyModal info={info} handleMoveData={handleMoveData} />
+          )}
           <button
             type="button"
             onClick={() => logout()}
-            className={`ms-3 px-2 rounded-2xl cursor-pointer bg-blue-500 text-white`}
+            className={`ms-3 p-3 rounded-2xl cursor-pointer bg-blue-500 text-white`}
           >
             Logout
           </button>

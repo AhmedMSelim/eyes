@@ -5,7 +5,13 @@ import { createPortal } from "react-dom";
 import { Rocket } from "@gravity-ui/icons";
 import { Button } from "@heroui/react";
 
-export default function CustomModal({ isOpen, onClose, title, children }) {
+export default function CustomModal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  handleMoveData,
+}) {
   const [mounted, setMounted] = useState(false);
 
   // التأكد من أن المكون يُعرض فقط بعد اكتمال التحميل في متصفح العميل (Client)
@@ -74,9 +80,9 @@ export default function CustomModal({ isOpen, onClose, title, children }) {
           </Button>
           <Button
             className="cursor-pointer bg-amber-300 p-3 rounded-xl"
-            onPress={onClose}
+            onPress={handleMoveData}
           >
-            متابعة
+            تاكيد
           </Button>
         </div>
       </div>

@@ -43,7 +43,8 @@ export async function POST(req) {
             new Date().toLocaleString("en-US", {
               timeZone: "Africa/Cairo",
               dateStyle: "short",
-              timeStyle: "medium",
+              timeStyle: "short",
+              hour12: false,
             }),
           ],
         ],

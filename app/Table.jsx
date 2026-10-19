@@ -2,7 +2,7 @@
 "use client";
 import { FaEdit } from "react-icons/fa";
 
-export default function Table({ data = [] }) {
+export default function Table({ data = [], handleEditClick }) {
   // التأكد من وجود بيانات
   if (!data || data.length === 0) {
     return (
@@ -52,7 +52,9 @@ export default function Table({ data = [] }) {
                 </td>
               ))}
               <td className="border w-full cursor-pointer flex  justify-center border-gray-300 px-4 py-3 font-bold text-gray-800">
-                <FaEdit />
+                <button onClick={() => handleEditClick(rowIndex, row)}>
+                  <FaEdit />
+                </button>
               </td>
             </tr>
           ))}

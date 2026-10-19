@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@heroui/react";
 import Table from "../Table";
 import MyModal from "../MyModal";
+import Srearch from "../Srearch";
 
 export default function Cairo() {
   const router = useRouter();
@@ -14,12 +16,12 @@ export default function Cairo() {
     message: "",
     visitType: "",
   });
-
+  const [edit, setEdit] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [info, setInfo] = useState([]);
-  console.log("Data from API:", info);
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const [isClient, setIsClient] = useState(false);
 
@@ -144,6 +146,69 @@ export default function Cairo() {
     }
   };
 
+  // جلب البيانات لعرضها في الجدول تحت الفورم
+
+  // 1. عندما يضغط المستخدم على زر "تعديل" بجانب صف معين (مثل الصف رقم 7)
+  const handleEditClick = (index, rowData) => {
+    setEdit(true);
+    setEditingIndex(index); // حفظ رقم الصف
+    // توزيع بيانات الصف على حقول الفورم (فترضنا أن rowData عبارة عن مصفوفة أعمدة)
+    setFormData({
+      name: rowData[1] || "",
+      age: rowData[2] || "",
+      phone: rowData[3] || "",
+      price: rowData[5] || "",
+      message: rowData[6] || "",
+      visitType: rowData[4] || "",
+    });
+    // تمرير الشاشة بسلاسة لأعلى عند الفورم
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // 2. عند إرسال الفورم (سواء لإضافة جديد أو حفظ التعديل)
+  const updateHandleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const rowArray = [
+      formData.name,
+      formData.age,
+      formData.phone,
+      formData.visitType,
+      price,
+      formData.message,
+    ]; // تحويل بيانات الفورم لمصفوفة أعمدة
+
+    try {
+      if (editingIndex !== null) {
+        // --- حالة التعديل: إرسال للتحديث في نفس المكان ---
+        const res = await fetch("/api/updateDataNasser", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            rowIndex: editingIndex,
+            updatedRowData: rowArray,
+          }),
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          router.refresh();
+          window.location.reload();
+          alert("تم تعديل البيانات وتحديثها في مكانها بنجاح!");
+          setEditingIndex(null); // الخروج من وضع التعديل
+        }
+      } else {
+        // --- حالة الإضافة العادية (لو كنت هتعمل API للإضافة) ---
+        // الكود الخاص بإضافة صف جديد...
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   function logout() {
     localStorage.removeItem("userToken");
     router.back();
@@ -155,6 +220,22 @@ export default function Cairo() {
 
   return (
     <div>
+      <div className="md:flex-row flex flex-col-reverse gap-2 justify-between items-center p-5 w-full">
+        <Srearch />
+        <div className={"text-green-600 text-4xl"}>New Cairo</div>
+        <div className="flex justify-between gap-3 text-center">
+          {data.length > 1 && (
+            <MyModal info={info} handleMoveData={handleMoveData} />
+          )}
+          <button
+            type="button"
+            onClick={() => logout()}
+            className={`ms-3 p-3 rounded-2xl cursor-pointer bg-blue-500 text-white`}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
       <div
         style={{
           margin: "40px auto",
@@ -169,21 +250,8 @@ export default function Cairo() {
             </p>
           )}
         </div>
-        <div className={"text-green-600 text-4xl"}>New Cairo</div>
-        <div className="absolute top-5 flex justify-between gap-3 right-5 text-center">
-          {data.length > 1 && (
-            <MyModal info={info} handleMoveData={handleMoveData} />
-          )}
-          <button
-            type="button"
-            onClick={() => logout()}
-            className={`ms-3 p-3 rounded-2xl cursor-pointer bg-blue-500 text-white`}
-          >
-            Logout
-          </button>
-        </div>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={edit ? updateHandleSubmit : handleSubmit}
           style={{ display: "flex", flexDirection: "column", gap: "12px" }}
         >
           <div>
@@ -282,13 +350,13 @@ export default function Cairo() {
               borderRadius: "4px",
               cursor: loading ? "not-allowed" : "pointer",
             }}
-            className={`w-full ${loading ? "bg-gray-400" : "bg-blue-500"} text-white font-bold py-2 px-4 rounded`}
+            className={`w-full ${loading ? "bg-gray-400" : edit ? "bg-amber-300" : "bg-blue-500"} text-white font-bold py-2 px-4 rounded`}
           >
-            {loading ? "Loading..." : "Send"}
+            {loading ? "Loading..." : edit ? "Edit" : "Send"}
           </button>
         </form>
       </div>
-      {/* <Table data={data} /> */}
+      {/* <Table data={data} handleEditClick={handleEditClick} /> */}
     </div>
   );
 }

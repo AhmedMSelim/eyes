@@ -41,7 +41,7 @@ export default function CustomModal({
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* خلفية معتمة مع تأثير الضبابية (Backdrop) */}
       <div
-        className="fixed inset-0 bg-white/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 white backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
@@ -72,17 +72,19 @@ export default function CustomModal({
         {/* الفوتر / أزرار التحكم (Footer) */}
         <div className="flex justify-end gap-4">
           <Button
-            className="cursor-pointer bg-amber-800 p-3 rounded-xl"
+            className="cursor-pointer p-3 bg-red-500 hover:bg-red-600 rounded-2xl"
             variant="light"
+            color="danger"
             onPress={onClose}
           >
             إلغاء
           </Button>
           <Button
-            className="cursor-pointer bg-amber-300 p-3 rounded-xl"
+            className="cursor-pointer p-3 bg-green-600 hover:bg-green-700 rounded-2xl"
+            color="primary"
             onPress={handleMoveData}
           >
-            تاكيد
+            متابعة
           </Button>
         </div>
       </div>

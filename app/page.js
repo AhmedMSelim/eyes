@@ -5,9 +5,8 @@ import New from "./New/page";
 
 export default function Home() {
   return (
-    <div>
-      <div className="w-full text-center"></div>
+    <>
       <Login />
-    </div>
+    </>
   );
 }
